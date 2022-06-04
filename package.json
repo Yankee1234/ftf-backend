@@ -20,19 +20,21 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "docker-all": "docker-compose -f docker-compose-db.yml -f docker-compose-services.yml",
-    "docker-db": "docker-compose -f docker-compose-db.yml",
-    "docker-services": "docker-compose -f docker-compose-services.yml"
+    "docker-db": "docker-compose -f docker-compose-db.yml"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/microservices": "^8.4.6",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.1",
     "@nestjs/typeorm": "^8.1.2",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.4.0",
     "typeorm": "0.2.45",
     "typeorm-transactional-cls-hooked": "^0.1.21"
   },
