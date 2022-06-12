@@ -20,11 +20,7 @@ services:
       - 33080:3306
     networks:
       - ftf-network
-      - sharednet
 
 networks:
   ftf-network:
     driver: bridge
-  sharednet:
-    external:
-      name: sharednet

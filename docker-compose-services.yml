@@ -7,7 +7,7 @@ services:
       dockerfile: ./Dockerfile
     command: yarn run start:dev
     ports:
-      - 4001:3001
+      - 3001:3001
     networks:
       - ftf-network
       - sharednet
