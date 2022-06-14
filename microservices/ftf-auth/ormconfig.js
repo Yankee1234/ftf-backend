@@ -6,7 +6,7 @@ module.exports = [
   username: 'admin',
   password: 'admin',
   database: 'user_db',
-  entities: [ __dirname + '/dist/src/domain/entities/*.entity.{js,ts}'],
+  entities: [ __dirname + 'src/**/*.entity.ts'],
   subscribers: [],
   logging: ['all'],
   logger: 'advanced-console',
@@ -18,7 +18,7 @@ module.exports = [
     bigNumberStrings: true,
   },
   cli: {
-    entitiesDir: 'src/domain'
+    entitiesDir: 'src/domain/entities'
   }
 }
 ]

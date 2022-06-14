@@ -1,18 +1,21 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthLoginRequest } from './dtos/auth-login-request.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { TokenRepository } from 'src/domain/repositories/token.repository';
 import { Auth, google } from 'googleapis';
 import { GoogleAuthRequest } from './dtos/google-auth-request.dto';
 import { ConfigService } from '@nestjs/config';
 import { User, UserRole } from 'src/domain/entities/user.entity';
 import { AuthRegisterRequest } from './dtos/auth-register-request.dto';
 import { UserRepository } from 'src/domain/repositories/user.repository';
-import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
+import { TokenRepository } from 'src/domain/repositories/token.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { JwtToken } from 'src/domain/entities/token.entity';
 
 interface UserJwtInfo {
     id: number;
@@ -26,11 +29,10 @@ export class AuthService {
     private oAuthClient: Auth.OAuth2Client;
 
   constructor(
-    private readonly usersRepo: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly usersRepo: UserRepository,
     private readonly tokensRepo: TokenRepository,
-    private readonly config: ConfigService,
-    private readonly userProfilesRepo: UserProfileRepository
+    private readonly config: ConfigService
   ) {
     const clientId = this.config.get('GOOGLE_CLIENT_ID');
     const clientSecret = this.config.get('GOOGLE_CLIENT_SECRET');
@@ -115,12 +117,11 @@ export class AuthService {
     newUser.email = data.email;
     newUser.password = await this.hashPassword(data.password);
 
-    const profile = this.userProfilesRepo.create();
+    /*const profile = this.userProfilesRepo.create();
 
     profile.userName = data.userName;
 
-    await this.userProfilesRepo.save(profile);
-
+    await this.userProfilesRepo.save(profile);*/
     await this.usersRepo.save(newUser);
 
     if(data.loginNow && data.loginNow.toString() === 'true') {

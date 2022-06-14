@@ -11,7 +11,7 @@ import { GoogleAuthRequest } from './dtos/google-auth-request.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @MessagePattern({ cmd: 'auth-login' })
+  /*@MessagePattern({ cmd: 'auth-login' })
   async login(data: AuthLoginRequest): Promise<AuthResponse> {
     try {
       const token = await this.authService.login(data);
@@ -46,5 +46,5 @@ export class AuthController {
     } catch(err) {
       return new AuthResponse(REGISTER_FAILED, err.message);
     }
-  }
+  }*/
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { EntityRepository } from "typeorm";
+import { Connection, EntityRepository } from "typeorm";
 import { BaseRepository } from "utils/typeorm/BaseRepository";
 import { User } from "../entities/user.entity";
 
@@ -16,9 +16,9 @@ export class UserRepository extends BaseRepository<User> {
 
     async findByLogin(login: string, email?: string) {
         const query = this.repository.createQueryBuilder('u')
-        .where('u.login = :login', { login });
+        .where('u.login = :login', {login})
 
-        if(email) query.andWhere('u.email = :email', { email })
+        if(email) query.andWhere('u.email = :email', { email });
 
         return await query.getOne();
     }
