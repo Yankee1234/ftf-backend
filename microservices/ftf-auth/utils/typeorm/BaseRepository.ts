@@ -8,20 +8,18 @@ import {
 } from 'typeorm-transactional-cls-hooked';
 
 export class BaseRepository<T extends ObjectLiteral> extends AbstractRepository<T> {
-    private $connectionName?: string;
 
     private $manager?: EntityManager;
 
     // @ts-ignore
     get manager() {
         return getEntityManagerOrTransactionManager(
-            this.$connectionName ?? 'default',
+            'default',
             this.$manager,
         );
     }
 
     set(manager?: EntityManager) {
         this.$manager = manager;
-        this.$connectionName = manager?.connection?.name;
     }
 }
