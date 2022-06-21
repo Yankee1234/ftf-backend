@@ -3,20 +3,20 @@ services:
   ftf_auth:
     container_name: ftf_auth
     build:
-      context: ./microservices/ftf-auth
+      context: ./microservices/ftf-user
       dockerfile: ./Dockerfile
     command: yarn run start:dev
     ports:
       - 3001:3001
     networks:
       - ftf-network
-      - sharednet
+      - usernet
     depends_on:
       - mysql_user
 
 networks:
   ftf-network:
     driver: bridge
-  sharednet:
+  usernet:
     external:
-      name: sharednet
+      name: usernet

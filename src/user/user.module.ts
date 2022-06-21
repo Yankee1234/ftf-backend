@@ -1,19 +1,13 @@
 import { Module } from '@nestjs/common';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    AuthModule,
-    UserModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService,
+  imports: [ConfigModule.forRoot()],
+  controllers: [UserController],
+  providers: [UserService,
     {
       provide: 'USER_SERVICE',
       inject: [ConfigService],
@@ -23,6 +17,7 @@ import { UserModule } from './user/user.module';
           port: configService.get('USER_PORT')
         }
       })
-    }],
+    }
+  ]
 })
-export class AppModule {}
+export class UserModule {}

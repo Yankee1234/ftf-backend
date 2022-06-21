@@ -20,7 +20,11 @@ services:
       - 33080:3306
     networks:
       - ftf-network
+      - usernet
 
 networks:
   ftf-network:
     driver: bridge
+  usernet:
+    external:
+      name: usernet
