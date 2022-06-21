@@ -1,12 +1,10 @@
 FROM node:16-slim
 
-RUN apt-get remove docker docker-engine docker.io \
-  && apt-get update \
-  && apt install docker.io
+VOLUME [ "/var/run/docker.sock:/var/run/docker.sock" ]
 
-RUN snap install docker 
-
-RUN npm i -g --force corepack
+RUN apt-get update && apt-get install -y \
+  curl \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY package.json ./
 
