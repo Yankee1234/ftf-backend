@@ -1,7 +1,7 @@
 version: "3.6"
 services:
-  ftf_auth:
-    container_name: ftf_auth
+  ftf_user:
+    container_name: ftf_user
     build:
       context: ./microservices/ftf-user
       dockerfile: ./Dockerfile
