@@ -6,8 +6,4 @@ export class GoogleAuthRequest {
   @IsNotEmpty()
   @ApiProperty()
   token!: string;
-
-  @IsString()
-  @ApiProperty()
-  login!: string;
 }

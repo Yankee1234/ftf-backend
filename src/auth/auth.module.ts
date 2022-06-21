@@ -4,11 +4,12 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ envFilePath: '../../.env'}),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -19,16 +20,20 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           expiresIn: '10m',
         },
       }),
-    }),
-    ClientsModule.register([
-      {
-        name: 'AUTH_SERVICE',
-        transport: Transport.TCP,
-        options: { port: 3001 },
-      },
-    ]),
+    })
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService,
+    {
+      provide: 'USER_SERVICE',
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ClientProxyFactory.create({
+        transport: Transport.TCP,
+        options: {
+          port: configService.get('USER_PORT')
+        }
+      })
+    }, JwtStrategy
+  ],
 })
 export class AuthModule {}

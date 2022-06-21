@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
   constructor(
-    @Inject('AUTH_SERVICE') private readonly authClient: ClientProxy,
+    @Inject('USER_SERVICE') private readonly authClient: ClientProxy,
   ) {}
 
   @Get('/auth-health')
