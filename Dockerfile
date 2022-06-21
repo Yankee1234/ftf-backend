@@ -1,7 +1,13 @@
 FROM node:16-slim
 
-RUN yarn run docker:all up
+COPY package.json ./
+
+COPY yarn.lock ./
+
+COPY . .
 
 RUN yarn install
+
+RUN yarn run docker:all up
 
 RUN yarn run start:dev
