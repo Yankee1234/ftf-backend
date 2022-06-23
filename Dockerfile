@@ -22,7 +22,7 @@ COPY yarn.lock ./
 
 COPY . .
 
-RUN docker network create usernet || true && docker-compose -f docker-compose-db.yml -f docker-compose-services.yml
+RUN docker-compose -f docker-compose-db.yml -f docker-compose-services.yml
 
 FROM node:14.17.0-slim
 
