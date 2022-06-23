@@ -8,9 +8,7 @@ RUN apt-get update && \
     apt-get install -qy curl && \
     curl -sSL https://get.docker.com/ | sh
 
-RUN service docker unmask
-
-RUN service docker start
+RUN dockerd
 
 RUN apt-get update -y
 
