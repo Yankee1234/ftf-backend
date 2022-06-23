@@ -1,4 +1,6 @@
-FROM node:14.17.0-slim
+FROM ubuntu:18.04
+
+WORKDIR /ftf-backend
 
 # Curl for healthcheck
 RUN apt-get update \
