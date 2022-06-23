@@ -8,6 +8,10 @@ RUN apt-get update && \
     apt-get install -qy curl && \
     curl -sSL https://get.docker.com/ | sh
 
+RUN rm -fr /var/run/docker.sock
+
+RUN service docker restart
+
 RUN dockerd
 
 RUN apt-get update -y
