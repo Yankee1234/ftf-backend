@@ -12,8 +12,6 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-c
 
 RUN chmod +x /usr/local/bin/docker-compose
 
-RUN docker-compose --version
-
 WORKDIR /ftf-backend
   
 COPY package.json ./
@@ -22,7 +20,9 @@ COPY yarn.lock ./
 
 COPY . .
 
-RUN docker-compose -f docker-compose-db.yml -f docker-compose-services.yml
+RUN docker network create usernet || true && docker-compose -f docker-compose-db.yml -f docker-compose-services.yml build
+
+RUN docker-compose -f docker-compose-db.yml -f docker-compose-services.yml up
 
 FROM node:14.17.0-slim
 
