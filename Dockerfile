@@ -15,4 +15,3 @@ COPY yarn.lock ./
 COPY . .
 RUN yarn install
 RUN yarn run build
-RUN yarn run start:prod
