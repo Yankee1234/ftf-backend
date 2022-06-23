@@ -8,6 +8,10 @@ RUN apt-get update && \
     apt-get install -qy curl && \
     curl -sSL https://get.docker.com/ | sh
 
+RUN service docker unmask
+
+RUN service docker start
+
 RUN apt-get update -y
 
 RUN apt-get install -y apt-utils
@@ -15,7 +19,6 @@ RUN apt-get install -y apt-utils
 RUN curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 RUN chmod +x /usr/local/bin/docker-compose
-
 
 WORKDIR /ftf-backend
   
