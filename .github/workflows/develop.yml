@@ -13,21 +13,21 @@ env:
 
 jobs:
       
-  deploy:
-    name: Deploy to Heroku
-    runs-on: ubuntu-18.04
+  docker:
+    name: Run docker-containers
+    runs-on: ubuntu-latest
     steps:
 
-    # Clone the repository
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    # Build Docker image
-    - name: Docker build
-      run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-
-    # Push the Docker image to Heroku Container Registry
-    - name: Publish
-      run: |
-        heroku container:push web -a $APP_NAME
-        heroku container:release web -a $APP_NAME
+    - uses: actions/checkout@v1
+    - name: Create docker network for user service
+      run: docker network create usernet || true
+    - name: Run docker-compose files
+      run: docker-compose -f docker-compose-db.yml -f docker-compose-services.yml
+    - name: Check running containers
+      run: docker ps -a
+    - name: Install packages
+      run: yarn install
+    - name: Prebuild project
+      run: yarn run prebuild
+    - name: Build project
+      run: yarn run build
