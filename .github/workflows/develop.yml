@@ -7,9 +7,6 @@ on:
     branches: [ develop ]
     
 #set environment variables 
-env:
-  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  APP_NAME: ${{ 'ftf-backend-v1' }}
 
 jobs:
       
@@ -21,8 +18,11 @@ jobs:
     - uses: actions/checkout@v1
     - name: Create docker network for user service
       run: docker network create usernet || true
-    - name: Run docker-compose files
-      run: docker-compose -f docker-compose-db.yml -f docker-compose-services.yml
+    - name: Build docker-compose files
+      run: docker-compose -f docker-compose-db.yml -f docker-compose-services.yml build
+
+    - name: Run containers
+      run: docker-compose -f docker-compose-db.yml -f docker-compose-services.yml up
     - name: Check running containers
       run: docker ps -a
     - name: Install packages
