@@ -4,8 +4,12 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { JwtStrategy } from './jwt.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserRepository } from 'src/domain/repositories/user.repository';
+import { TokenRepository } from 'src/domain/repositories/token.repository';
+import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
 
 @Module({
   imports: [
@@ -20,20 +24,10 @@ import { JwtStrategy } from './jwt.strategy';
           expiresIn: '10m',
         },
       }),
-    })
+    }),
+    TypeOrmModule.forFeature([UserRepository, TokenRepository, UserProfileRepository])
   ],
   controllers: [AuthController],
-  providers: [AuthService,
-    {
-      provide: 'USER_SERVICE',
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ClientProxyFactory.create({
-        transport: Transport.TCP,
-        options: {
-          port: configService.get('USER_PORT')
-        }
-      })
-    }, JwtStrategy
-  ],
+  providers: [AuthService,JwtStrategy],
 })
 export class AuthModule {}

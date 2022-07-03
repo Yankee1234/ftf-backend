@@ -11,14 +11,14 @@ const { MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_USER_PORT, MYSQL_USER_
 
 module.exports = [
    {
-       name: 'default', type: 'mysql',
+        name: 'default', type: 'mysql',
   host: MYSQL_USER_HOST,
   port: MYSQL_USER_PORT,
   username: MYSQL_USER,
   password: MYSQL_PASSWORD,
   database: MYSQL_DATABASE,
   entities: [ __dirname + '/dist/**/*.entity.{js,ts}'],
-  migrations: [__dirname + '/dist/domain/migrations/*{.ts,.js}'],
+  migrations: [__dirname + '/dist/src/domain/migrations/*{.ts,.js}'],
   subscribers: [],
   logging: ['all'],
   logger: 'advanced-console',

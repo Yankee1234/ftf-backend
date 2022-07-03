@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
 import { UserRepository } from 'src/domain/repositories/user.repository';
-import { UpdateProfileRequest } from './dtos/update-profile-request.dto';
+import { UpdateProfileRequest } from '../../../../src/user/dtos/update-profile-request.dto';
 
 @Injectable()
 export class UserService {

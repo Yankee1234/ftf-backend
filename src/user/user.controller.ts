@@ -9,6 +9,7 @@ import { ParseIntPipe } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { AuthRole } from 'src/auth/security';
 import { UnauthorizedException } from '@nestjs/common';
+import { Put } from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
@@ -19,8 +20,8 @@ export class UserController {
     @Get(':id')
     @Auth()
     @ApiOperation({ summary: 'Get user profile'})
-    async getProfile(@Param('id', ParseIntPipe) id: number, @Req() req: PrivateRequest) {
-        return await this.userService.getProfile(id);
+    async getProfile(@Param('id') id: string, @Req() req: PrivateRequest) {
+        return await this.userService.getProfileById(id === 'me' ? req.user.id : +id, false);
     }
 
     @Get('profiles')
@@ -29,6 +30,16 @@ export class UserController {
     async getProfiles(@Req() req: PrivateRequest) {
         if(req.user.role !== AuthRole.Admin) throw new UnauthorizedException('You are not an admin');
 
-        return await this.userService.getProfiles();
+        return await this.userService.getAllProfilesWithUsers();
     }
+
+    @Get(':id/all')
+    @Auth()
+    @ApiOperation({ summary: 'Get full user profile by admin'})
+    async getProfileForAdmin(@Req() req: PrivateRequest, @Param('id', ParseIntPipe) id: number) {
+        if(req.user.role !== AuthRole.Admin) throw new UnauthorizedException('You are not an admin');
+
+        return await this.userService.getProfileById(id, true);
+    }
+
 }

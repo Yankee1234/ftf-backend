@@ -5,13 +5,9 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
   constructor(
-    @Inject('USER_SERVICE') private readonly authClient: ClientProxy,
   ) {}
 
   @Get('/auth-health')
   async getHello() {
-    const health = await this.authClient.send({ cmd: 'health-check' }, {});
-
-    health.subscribe((data) => console.log(data));
   }
 }

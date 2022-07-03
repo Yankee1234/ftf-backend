@@ -22,7 +22,6 @@ export class AuthController {
   @ApiOkResponse({ type: MicroserviceResponse })
   async login(@Body() req: AuthLoginRequest) {
     const resp = await this.authService.login(req);
-    if(resp.message === 'login-failed') throw new UnauthorizedException(resp.data);
 
     return resp;
   }
@@ -30,10 +29,8 @@ export class AuthController {
   @Post('google-auth')
   @ApiOperation({ summary: 'login with google' })
   @ApiBody({ type: GoogleAuthRequest })
-  @ApiOkResponse({ type: MicroserviceResponse })
   async loginGoogle(@Body() req: GoogleAuthRequest) {
-    const resp = await this.authService.googleLogin(req);
-    if(resp.message === 'login-failed') throw new UnauthorizedException(resp.data);
+    const resp = await this.authService.googleAuth(req);
 
     return resp;
   }
@@ -41,10 +38,8 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: 'Register'})
   @ApiBody({ type: UserRegisterRequest})
-  @ApiOkResponse({ type: MicroserviceResponse })
   async register(@Body() req: UserRegisterRequest) {
     const resp = await this.authService.register(req); 
-    if(resp.message === 'register-failed') throw new ForbiddenException(resp.data);
 
     return resp;
   }

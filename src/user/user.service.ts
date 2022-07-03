@@ -5,48 +5,40 @@ import { ClientProxy } from '@nestjs/microservices/client';
 import { datacatalog } from 'googleapis/build/src/apis/datacatalog';
 import { UserProfile } from 'microservices/ftf-user/src/domain/entities/user-profile.entity';
 import { MicroserviceResponse } from 'src/common/dtos/microservice-response.dto';
+import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
+import { UserRepository } from 'src/domain/repositories/user.repository';
+import { UpdateProfileRequest } from './dtos/update-profile-request.dto';
 import { UserProfileResponse } from './dtos/user-profile-response.dto';
 
 @Injectable()
 export class UserService {
-    constructor(@Inject('USER_SERVICE') private readonly userClient: ClientProxy) {}
+    constructor(
+        private readonly profilesRepo: UserProfileRepository,
+        private readonly usersRepo: UserRepository
+    ) {}
 
-    async getProfile(id: number) {
-        const observable = await this.userClient.send({ cmd: 'get-profile' }, { userId: id })
+    async getProfileById(userId: number, withUser: boolean) {
+        const user = await this.profilesRepo.getUserProfileById(userId, withUser);
+        if(!user) throw new NotFoundException('User not found');
 
-        const resp = await new Promise<MicroserviceResponse>((resolve) => {
-            observable.subscribe((data) => {
-                resolve(data);
-            })
-        })
-
-        if(resp.message === 'getting-profile-failed') throw new NotFoundException(resp.data);
-
-        if(resp.data instanceof UserProfileResponse) return resp.data;
-        else throw new InternalServerErrorException('Data is not instance of UserProfileResponse');
+        return user;
     }
 
-    async getProfiles() {
-        const observable = await this.userClient.send({ cmd: 'get-all-users-profiles'}, {});
+    async getAllProfilesWithUsers() {
+        return await this.profilesRepo.getAll();
+    }
 
-        const resp = await new Promise<MicroserviceResponse>((resolve) => {
-            observable.subscribe((data) => {
-                resolve(data);
-            })
-        })
+    async updateProfile(data: UpdateProfileRequest) {
+        const profile = await this.getProfileById(data.userId, true);
+        const user = profile.user;
 
-        if(resp.message === 'getting-profile-failed') throw new InternalServerErrorException(resp.data);
+        profile.userName = data.userName ?? profile.userName;
+        profile.phoneNumber = data.phoneNumber ?? profile.phoneNumber;
+        user.email = data.email ?? user.email;
 
-        const responseArray: UserProfileResponse[] = [];
+        await this.profilesRepo.save(profile);
+        await this.usersRepo.save(user);
 
-        if(Array.isArray(resp.data)) {
-            const arr = resp.data;
-
-            for(let i = 0; i < arr.length; i += 1) {
-                const item = arr[i];
-                if(item instanceof UserProfileResponse) responseArray.push(item);
-                else throw new InternalServerErrorException('Item of data array is not instance of UserProfileResponse');
-            }
-        }
+        return profile;
     }
 }

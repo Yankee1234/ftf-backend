@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { GETTING_PROFILE_FAILED, GETTING_PROFILE_SUCCESSFUL, UPDATING_PROFILE_FAILED, UPDATING_PROFILE_SUCCESSFUL } from 'src/constants/constants';
-import { UpdateProfileRequest } from './dtos/update-profile-request.dto';
+import { UpdateProfileRequest } from '../../../../src/user/dtos/update-profile-request.dto';
 import { UserProfileRequest } from './dtos/user-profile-request.dto';
 import { UserDetails, UserProfileResponse } from './dtos/user-profile-response.dto';
 import { UserService } from './user.service';

@@ -3,21 +3,15 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forFeature([UserProfileRepository ])
+  ],
   controllers: [UserController],
-  providers: [UserService,
-    {
-      provide: 'USER_SERVICE',
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ClientProxyFactory.create({
-        transport: Transport.TCP,
-        options: {
-          port: configService.get('USER_PORT')
-        }
-      })
-    }
-  ]
+  providers: [UserService]
 })
 export class UserModule {}
