@@ -16,18 +16,7 @@ jobs:
     steps:
 
     - uses: actions/checkout@v1
-    - uses: actions/setup-node@v3
-    - name: Create docker network for user service
-      run: docker network create usernet || true
-    - name: Build docker-compose files
-      run: docker-compose -f docker-compose-db.yml -f docker-compose-services.yml build
 
-    - name: Run containers
-      run: docker-compose -f docker-compose-db.yml -f docker-compose-services.yml up -d
-    - name: Check running containers
-      run: docker ps -a
-
-      
     - name: Install packages
       run: yarn install
     - name: Prebuild project

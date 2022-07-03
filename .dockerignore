@@ -1,6 +1,0 @@
-/microservices/**/node_modules
-/node_modules
-Dockerfile
-.dockerignore
-.gitignore
-.ormconfig.js
