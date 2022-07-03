@@ -5,11 +5,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
+import { UserRepository } from 'src/domain/repositories/user.repository';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([UserProfileRepository ])
+    TypeOrmModule.forFeature([UserProfileRepository, UserRepository])
   ],
   controllers: [UserController],
   providers: [UserService]
