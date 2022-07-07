@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { BaseRepository } from "src/utils/typeorm/BaseRepository";
-import { EntityRepository } from "typeorm";
+import { EntityRepository, QueryBuilder } from "typeorm";
 import { UserProfile, UserProfileRole } from "../entities/user-profile.entity";
 
 interface ICreateUserProfile {
@@ -31,6 +31,8 @@ export class UserProfileRepository extends BaseRepository<UserProfile> {
 
         if(withUser && withUser.toString() === 'true') query.innerJoinAndSelect('p.user', 'u');
         else query.innerJoin('p.user', 'u');
+        query.leftJoinAndSelect('p.games', 'games')
+        .leftJoinAndSelect('games.game', 'game')
 
         query.where('p.userId = :userId', { userId });
 

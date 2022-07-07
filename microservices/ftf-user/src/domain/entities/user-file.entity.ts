@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('file_storage')
+/*@Entity('file_storage')
 export class UserFile {
     @PrimaryGeneratedColumn()
     id!: number;
@@ -15,4 +15,4 @@ export class UserFile {
         type: 'longblob'
     })
     data!: Buffer;
-}
+}*/

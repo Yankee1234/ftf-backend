@@ -11,17 +11,18 @@ const { MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_USER_PORT, MYSQL_USER_
 
 module.exports = [
    {
-        name: 'default', type: 'mysql',
+        name: 'default', type: 'postgres',
   host: MYSQL_USER_HOST,
   port: MYSQL_USER_PORT,
   username: MYSQL_USER,
   password: MYSQL_PASSWORD,
   database: MYSQL_DATABASE,
   entities: [ __dirname + '/dist/**/*.entity.{js,ts}'],
-  migrations: [__dirname + '/dist/src/domain/migrations/*{.ts,.js}'],
+  migrations: [__dirname + '/dist/src/domain/typeorm-migrations/*{.ts,.js}'],
   subscribers: [],
   logging: ['all'],
   logger: 'advanced-console',
+  migrationsTableName: 'migrations_typeorm',
   synchronize: false,
   extra: {
     charset: 'utf8mb4_0900_ai_ci',
@@ -31,7 +32,7 @@ module.exports = [
   },
   cli: {
     entitiesDir: 'src/domain/entities',
-    migrationsDir: 'src/domain/migrations',
+    migrationsDir: 'src/domain/typeorm-migrations',
   }
 }
 ]

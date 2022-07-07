@@ -1,21 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { UserProfileRole } from "src/domain/entities/user-profile.entity";
+import { GameItem } from "./game-item.dto";
 
 export class UserProfileResponse {
     @ApiProperty()
-    userId!: number;
-
-    @ApiProperty()
     userName!: string;
-
-    @ApiProperty()
-    phoneNumber?: string;
 
     @ApiProperty()
     avatarId?: number;
 
     @ApiProperty()
-    login?: string;
+    email!: string;
+    
+    @ApiProperty({ enum: UserProfileRole })
+    role!: UserProfileRole;
 
-    @ApiProperty()
-    email?: string;
+    games: GameItem[] = [];
 }
