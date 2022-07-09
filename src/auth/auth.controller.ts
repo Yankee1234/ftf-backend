@@ -19,7 +19,6 @@ export class AuthController {
   @Post('login')
   @ApiBody({ type: AuthLoginRequest })
   @ApiOperation({ summary: 'Login' })
-  @ApiOkResponse({ type: MicroserviceResponse })
   async login(@Body() req: AuthLoginRequest) {
     const resp = await this.authService.login(req);
 

@@ -9,6 +9,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from 'src/domain/repositories/user.repository';
 import { TokenRepository } from 'src/domain/repositories/token.repository';
 import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
+import { User } from 'src/domain/entities/user.entity';
+import { JwtToken } from 'src/domain/entities/token.entity';
+import { UserProfile } from 'src/domain/entities/user-profile.entity';
 
 @Module({
   imports: [
@@ -24,9 +27,9 @@ import { UserProfileRepository } from 'src/domain/repositories/user-profile.repo
         },
       }),
     }),
-    TypeOrmModule.forFeature([UserRepository, TokenRepository, UserProfileRepository])
+    TypeOrmModule.forFeature([User, JwtToken, UserProfile])
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService,JwtStrategy, UserRepository, TokenRepository, UserProfileRepository],
 })
 export class AuthModule {}

@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { datacatalog } from 'googleapis/build/src/apis/datacatalog';
-import { UserProfile } from 'microservices/ftf-user/src/domain/entities/user-profile.entity';
 import { MicroserviceResponse } from 'src/common/dtos/microservice-response.dto';
 import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
 import { UserRepository } from 'src/domain/repositories/user.repository';

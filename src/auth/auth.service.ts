@@ -7,11 +7,11 @@ import { UnauthorizedException } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepository } from 'src/domain/repositories/user.repository';
 import { TokenRepository } from 'src/domain/repositories/token.repository';
 import { UserProfileRepository } from 'src/domain/repositories/user-profile.repository';
 import { UserRole } from 'src/domain/entities/user.entity';
 import { AuthRegisterRequest } from './dtos/auth-register-request.dto';
+import { UserRepository } from 'src/domain/repositories/user.repository';
 
 @Injectable()
 export class AuthService {
@@ -19,10 +19,10 @@ export class AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersRepo: UserRepository,
     private readonly tokensRepo: TokenRepository,
     private readonly config: ConfigService,
-    private readonly userProfilesRepo: UserProfileRepository
+    private readonly userProfilesRepo: UserProfileRepository,
+    private readonly usersRepo: UserRepository,
   ) {
     const clientId = this.config.get('GOOGLE_CLIENT_ID');
     const clientSecret = this.config.get('GOOGLE_CLIENT_SECRET');
@@ -99,34 +99,38 @@ export class AuthService {
   }
 
   async register(data: AuthRegisterRequest) {
-    const user = await this.usersRepo.getByLogin(data.login, data.email);
-    if(user) throw new ForbiddenException('User exists');
+    try {
+      const user = await this.usersRepo.getByLogin(data.login, data.email);
+      if(user) throw new ForbiddenException('User exists');
 
-    const newUser = this.usersRepo.create();
-    newUser.login = data.login;
-    newUser.email = data.email;
-    newUser.password = await this.hashPassword(data.password);
-    await this.usersRepo.save(newUser);
+      const newUser = this.usersRepo.create();
+      newUser.login = data.login;
+      newUser.email = data.email;
+      newUser.password = await this.hashPassword(data.password);
+      await this.usersRepo.save(newUser);
 
-    const profile = this.userProfilesRepo.create({userId: newUser.id, userName: data.userName});
+      const profile = this.userProfilesRepo.createProfile({userId: newUser.id, userName: data.userName});
 
-    await this.userProfilesRepo.save(profile);
-    
+      await this.userProfilesRepo.save(profile);
+      
+      if(data.loginNow && data.loginNow.toString() === 'true') {
+        const tokenString = await this.jwtService.signAsync({
+          id: newUser.id,
+          login: newUser.login,
+          role: newUser.role,
+        });
+        const newToken = this.tokensRepo.create();
+        newToken.token = tokenString;
+        await this.tokensRepo.save(newToken);
 
-    if(data.loginNow && data.loginNow.toString() === 'true') {
-      const tokenString = await this.jwtService.signAsync({
-        id: newUser.id,
-        login: newUser.login,
-        role: newUser.role,
-      });
-      const newToken = this.tokensRepo.create();
-      newToken.token = tokenString;
-      await this.tokensRepo.save(newToken);
+        return newToken.token;
+      }
 
-      return newToken.token;
+      return;
+    } catch(err) {
+      throw err;
     }
 
-    return;
   }
 
   async hashPassword(plainPassword: string): Promise<string> {

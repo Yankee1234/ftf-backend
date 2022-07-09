@@ -1,25 +1,32 @@
 import { Injectable } from "@nestjs/common";
-import { BaseRepository } from "src/utils/typeorm/BaseRepository";
-import { EntityRepository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { EntityRepository, Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 
 @Injectable()
-@EntityRepository(User)
-export class UserRepository extends BaseRepository<User> {
+export class UserRepository {
+    constructor(@InjectRepository(User) private repo: Repository<User>) {}
+
     create() {
-        return this.repository.create();
+        return this.repo.create();
     }
 
     async save(user: User) {
-        await this.repository.save(user);
+        await this.repo.save(user);
     }
 
     async getByLogin(login: string, email?: string) {
-        const query = this.repository.createQueryBuilder('u')
+        const query = this.repo.createQueryBuilder('u')
         .where('u.login = :login', {login})
 
         if(email) query.andWhere('u.email = :email', { email });
 
         return await query.getOne();
+    }
+
+    async getById(id: number) {
+        return await this.repo.createQueryBuilder('u')
+        .where('u.id = :id', { id })
+        .getOne();
     }
 }

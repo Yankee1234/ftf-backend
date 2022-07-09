@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { BaseRepository } from "src/utils/typeorm/BaseRepository";
-import { EntityRepository, QueryBuilder } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { EntityRepository, QueryBuilder, Repository } from "typeorm";
 import { UserProfile, UserProfileRole } from "../entities/user-profile.entity";
 
 interface ICreateUserProfile {
@@ -10,10 +10,12 @@ interface ICreateUserProfile {
 }
 
 @Injectable()
-@EntityRepository(UserProfile)
-export class UserProfileRepository extends BaseRepository<UserProfile> {
-    create(user: ICreateUserProfile) {
-        const profile = new UserProfile();
+export class UserProfileRepository {
+
+    constructor(@InjectRepository(UserProfile) private repo: Repository<UserProfile>) {}
+
+    createProfile(user: ICreateUserProfile) {
+        const profile = this.repo.create();
         profile.userId = user.userId;
         profile.userName  =user.userName;
         profile.phoneNumber = user.phoneNumber;
@@ -23,11 +25,11 @@ export class UserProfileRepository extends BaseRepository<UserProfile> {
     }
 
     async save(user: UserProfile) {
-        await this.repository.save(user);
+        await this.repo.save<UserProfile>(user);
     }
 
     async getUserProfileById(userId: number, withUser: boolean) {
-        const query = this.createQueryBuilder('p')
+        const query = this.repo.createQueryBuilder('p')
 
         if(withUser && withUser.toString() === 'true') query.innerJoinAndSelect('p.user', 'u');
         else query.innerJoin('p.user', 'u');
@@ -40,7 +42,7 @@ export class UserProfileRepository extends BaseRepository<UserProfile> {
     }
 
     async getAll() {
-        return await this.createQueryBuilder('p')
+        return await this.repo.createQueryBuilder('p')
         .innerJoinAndSelect('p.user', 'u')
         .getMany();
     }
