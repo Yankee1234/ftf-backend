@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { UserFile } from "./user-file.entity";
 //import { UserFile } from "./user-file.entity";
 import { User } from "./user.entity";
 import { UsersGames } from "./users-games.entity";
@@ -27,11 +28,11 @@ export class UserProfile {
     @Column('enum', { enum: UserProfileRole, default: UserProfileRole.Newbie })
     role!: UserProfileRole;
 
-    /*@OneToOne(() => UserFile, { onDelete: 'CASCADE', nullable: true})
-    avatar?: UserFile;*/
+    @OneToOne(() => UserFile, { nullable: true})
+    avatar?: UserFile | null;
 
     @Column({ nullable: true })
-    avatarId?: number;
+    avatarId?: number | null;
 
     @OneToMany(() => UsersGames, (game) => game.game)
     games!: UsersGames[];

@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { ShopModule } from './shop/shop.module';
 import { LoggerModule } from 'nestjs-pino';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { LoggerModule } from 'nestjs-pino';
     }),
     GameModule,
     ShopModule,
-    LoggerModule.forRoot()
+    LoggerModule.forRoot(),
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService]

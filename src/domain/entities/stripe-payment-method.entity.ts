@@ -22,4 +22,7 @@ export class PaymentMethod {
 
     @Column('enum', { enum: PMType, default: PMType.Card})
     pmType!: PMType;
+
+    @Column()
+    lastNumbers!: string;
 }

@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { UserFile } from "./user-file.entity";
 //import { UserFile } from "./user-file.entity";
 import { User } from "./user.entity";
 
@@ -20,9 +21,9 @@ export class AdminProfile {
     @Column('enum', { enum: AdminRole })
     role!: AdminRole;
 
-    /*@OneToOne(() => UserFile, { onDelete: 'CASCADE', nullable: true})
-    avatar?: UserFile;*/
+    @OneToOne(() => UserFile, { nullable: true})
+    avatar?: UserFile | null;
 
     @Column({ nullable: true })
-    avatarId?: number;
+    avatarId?: number | null;
 }

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./user.entity";
 
 @Entity('notifications')
 export class Notification {
@@ -13,4 +14,11 @@ export class Notification {
 
     @Column({ type: 'timestamp', nullable: true })
     readAt!: Date | null;
+
+    @Column()
+    userId!: number;
+
+    @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
+    @JoinColumn({name:'userId'})
+    user!: User;
 }
