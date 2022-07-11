@@ -1,4 +1,4 @@
-import { Column } from 'typeorm';
+import { Column, CreateDateColumn } from 'typeorm';
 import { PrimaryGeneratedColumn } from 'typeorm';
 import { Entity } from 'typeorm';
 import { Exclude } from 'class-transformer';
@@ -25,4 +25,7 @@ export class User {
 
   @Column('enum', { enum: UserRole, default: UserRole.User })
   role!: UserRole;
+
+  @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
+  createdAt!: Date;
 }

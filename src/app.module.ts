@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
+import { ShopModule } from './shop/shop.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { GameModule } from './game/game.module';
       },
     }),
     GameModule,
+    ShopModule,
+    LoggerModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService]

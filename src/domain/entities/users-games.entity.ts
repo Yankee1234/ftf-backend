@@ -1,5 +1,4 @@
 import { Column, PrimaryGeneratedColumn } from "typeorm";
-import { PrimaryColumn } from "typeorm/decorator/columns/PrimaryColumn";
 import { Entity } from "typeorm/decorator/entity/Entity";
 import { JoinColumn } from "typeorm/decorator/relations/JoinColumn";
 import { ManyToOne } from "typeorm/decorator/relations/ManyToOne";

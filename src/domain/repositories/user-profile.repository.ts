@@ -12,7 +12,7 @@ interface ICreateUserProfile {
 @Injectable()
 export class UserProfileRepository {
 
-    constructor(@InjectRepository(UserProfile) private repo: Repository<UserProfile>) {}
+    constructor(@InjectRepository(UserProfile) private readonly repo: Repository<UserProfile>) {}
 
     createProfile(user: ICreateUserProfile) {
         const profile = this.repo.create();

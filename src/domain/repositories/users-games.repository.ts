@@ -12,7 +12,7 @@ interface UserGame {
 @Injectable()
 export class UsersGamesRepository {
 
-  constructor(@InjectRepository(UsersGames) private repo: Repository<UsersGames>) {}
+  constructor(@InjectRepository(UsersGames) private readonly repo: Repository<UsersGames>) {}
 
     create() {
         return this.repo.create();
