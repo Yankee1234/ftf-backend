@@ -7,13 +7,18 @@ import { PMType } from "src/domain/entities/stripe-payment-method.entity";
 import { StripeCustomerRepository } from "src/domain/repositories/stripe-customer.repository";
 import { StripePaymentMethodRepository } from "src/domain/repositories/stripe-payment-method.repository";
 import { UserProfileRepository } from "src/domain/repositories/user-profile.repository";
-import { UserRepository } from "src/domain/repositories/user.repository";
 import Stripe from 'stripe';
 import { EntityNotFoundError } from "typeorm";
-import { runOnTransactionCommit, Transactional } from "typeorm-transactional-cls-hooked";
+import { Transactional } from "typeorm-transactional-cls-hooked";
 import { AttachPaymentMethodRequest } from "./dtos/attach-payment-method-request.dto";
+import { CreateStripeProductRequest } from "./dtos/create-product-request.dto";
 import { PaymentMethodAttachedEvent } from "./events/payment-method-attached-event";
-import { StripeCustomerCreateEvent } from "./events/stripe-customer-create-event";
+import { formatStripeCurrency } from "./helpers/stripe-helper";
+
+interface ICreatedProductData {
+    productId: string;
+    priceId: string;
+}
 
 @Injectable()
 export class PaymentsService {
@@ -85,6 +90,7 @@ export class PaymentsService {
             localPaymentMethod.pmType = PMType.Card;
             localPaymentMethod.paymentMethodId = attachedPaymentMethod.id;
             localPaymentMethod.userId = identity.id;
+            localPaymentMethod.lastNumbers = req.number.slice(req.number.length - 4);
 
             await this.paymentMethodRepo.save(localPaymentMethod);
 
@@ -111,5 +117,22 @@ export class PaymentsService {
         return paymentMethod.id;
     }
 
-    
+    async createProduct(req: CreateStripeProductRequest): Promise<ICreatedProductData> {
+        try {
+            const product = await this.stripe.products.create({
+                name: req.name,
+                metadata: {
+                    productId: req.productId
+                },
+                default_price_data: {
+                    currency: req.money.currency,
+                    unit_amount: formatStripeCurrency(req.money)
+                }
+            })
+
+            return { productId: product.id, priceId: typeof product.default_price === 'string' ? product.default_price : product.default_price.id };
+        } catch(err) {
+            this.log.error('Error with creating product', { err });
+        }
+    }
 }
