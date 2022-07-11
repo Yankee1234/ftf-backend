@@ -1,3 +1,4 @@
+import { CreateDateColumn } from "typeorm";
 import { Column } from "typeorm/decorator/columns/Column";
 import { PrimaryColumn } from "typeorm/decorator/columns/PrimaryColumn";
 import { PrimaryGeneratedColumn } from "typeorm/decorator/columns/PrimaryGeneratedColumn";
@@ -15,4 +16,7 @@ export class Game {
 
     @OneToMany(() => UsersGames, (user) => user.user)
     usersGames!: UsersGames[];
+
+    @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
+    createdAt!: Date;
 }

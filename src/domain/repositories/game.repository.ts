@@ -7,7 +7,7 @@ import { Game } from "../entities/game.entity";
 @Injectable()
 export class GameRepository {
 
-    constructor(@InjectRepository(Game) private repo: Repository<Game>) {}
+    constructor(@InjectRepository(Game) private readonly repo: Repository<Game>) {}
 
     create() {
         return this.repo.create();

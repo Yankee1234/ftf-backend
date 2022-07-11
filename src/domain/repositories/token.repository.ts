@@ -6,7 +6,7 @@ import { JwtToken } from "../entities/token.entity";
 @Injectable()
 export class TokenRepository {
 
-  constructor(@InjectRepository(JwtToken) private repo: Repository<JwtToken>) {}
+  constructor(@InjectRepository(JwtToken) private readonly repo: Repository<JwtToken>) {}
 
     create() {
         return this.repo.create();
