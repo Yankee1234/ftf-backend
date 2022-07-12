@@ -1,9 +1,9 @@
 export class AttachPaymentMethodRequest {
-    number!: string;
+  number!: string;
 
-    expireYear!: number;
+  expireYear!: number;
 
-    expireMonth!: number;
+  expireMonth!: number;
 
-    cvc!: string;
+  cvc!: string;
 }

@@ -1,17 +1,17 @@
 export class UpdateProfileRequest {
-    userId!: number;
+  userId!: number;
 
-    email?: string;
+  email?: string;
 
-    userName?: string;
+  userName?: string;
 
-    phoneNumber?: string;
+  phoneNumber?: string;
 
-    avatar?: UploadedFile;
+  avatar?: UploadedFile;
 }
 
 interface UploadedFile {
-    name: string;
-    mimeType: string;
-    buffer: Buffer;
+  name: string;
+  mimeType: string;
+  buffer: Buffer;
 }

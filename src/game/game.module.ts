@@ -14,6 +14,12 @@ import { UserProfileRepository } from 'src/domain/repositories/user-profile.repo
 @Module({
   controllers: [GameController],
   imports: [TypeOrmModule.forFeature([Game, UsersGames, User, UserProfile])],
-  providers: [GameService, GameRepository, UsersGamesRepository, UserRepository, UserProfileRepository]
+  providers: [
+    GameService,
+    GameRepository,
+    UsersGamesRepository,
+    UserRepository,
+    UserProfileRepository,
+  ],
 })
 export class GameModule {}

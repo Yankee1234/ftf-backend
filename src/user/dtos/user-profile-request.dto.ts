@@ -1,3 +1,3 @@
 export class UserProfileRequest {
-    userId!: number;
+  userId!: number;
 }

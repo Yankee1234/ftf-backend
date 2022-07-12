@@ -1,3 +1,3 @@
 export class GoogleAuthRequest {
-    token!: string;
+  token!: string;
 }

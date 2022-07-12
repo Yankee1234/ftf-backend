@@ -1,5 +1,5 @@
 export class CreateNotificationRequest {
-    message!: string;
+  message!: string;
 
-    userId!: number;
+  userId!: number;
 }

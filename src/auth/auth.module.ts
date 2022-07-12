@@ -15,7 +15,7 @@ import { UserProfile } from 'src/domain/entities/user-profile.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: '../../.env'}),
+    ConfigModule.forRoot({ envFilePath: '../../.env' }),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -27,9 +27,15 @@ import { UserProfile } from 'src/domain/entities/user-profile.entity';
         },
       }),
     }),
-    TypeOrmModule.forFeature([User, JwtToken, UserProfile])
+    TypeOrmModule.forFeature([User, JwtToken, UserProfile]),
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy, UserRepository, TokenRepository, UserProfileRepository],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    UserRepository,
+    TokenRepository,
+    UserProfileRepository,
+  ],
 })
 export class AuthModule {}

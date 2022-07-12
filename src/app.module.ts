@@ -33,9 +33,9 @@ import { NotificationModule } from './notification/notification.module';
     GameModule,
     ShopModule,
     LoggerModule.forRoot(),
-    NotificationModule
+    NotificationModule,
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService],
 })
 export class AppModule {}

@@ -1,18 +1,29 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
-import { User } from "./user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity('stripe_customers')
 export class StripeCustomer {
-    @PrimaryColumn()
-    stripeCustomerId: string;
+  @PrimaryColumn()
+  stripeCustomerId: string;
 
-    @Column()
-    userId!: number;
+  @Column()
+  userId!: number;
 
-    @OneToOne(() => User)
-    @JoinColumn({ name: 'userId' })
-    user!: User;
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 
-    @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
-    createdAt!: Date;
+  @CreateDateColumn({
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+  })
+  createdAt!: Date;
 }

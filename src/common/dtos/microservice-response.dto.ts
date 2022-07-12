@@ -1,5 +1,5 @@
 export class MicroserviceResponse {
-    message!: string;
+  message!: string;
 
-    data?: unknown | any;
+  data?: unknown | any;
 }

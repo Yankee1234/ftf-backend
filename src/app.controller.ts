@@ -3,10 +3,8 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(
-  ) {}
+  constructor() {}
 
   @Get('/auth-health')
-  async getHello() {
-  }
+  async getHello() {}
 }

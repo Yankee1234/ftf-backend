@@ -1,32 +1,61 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
-import { User } from "./user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ProductOrder } from './product-order.entity';
+import { Product } from './product.entity';
+import { User } from './user.entity';
 
 export enum PaymentStatus {
-    Pending = 'pending',
-    Succeeded = 'succeeded'
+  Pending = 'pending',
+  Succeeded = 'succeeded',
+  Canceled = 'canceled',
 }
 
 @Entity('payments')
 export class Payment {
-    @PrimaryColumn()
-    stripePaymentId!: string;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
-    createdAt!: Date;
+  @Column()
+  stripePaymentId!: string;
 
-    @Column('enum', { enum: PaymentStatus })
-    status!: PaymentStatus;
+  @CreateDateColumn({
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+  })
+  createdAt!: Date;
 
-    @Column('decimal', { scale: 2, precision: 13})
-    chargeAmount!: string;
+  @Column('enum', { enum: PaymentStatus, default: PaymentStatus.Pending })
+  status!: PaymentStatus;
 
-    @Column('char', { length: 3 })
-    chargeCurrency!: string;
+  @Column('decimal', { scale: 2, precision: 13 })
+  chargeAmount!: string;
 
-    @Column()
-    userId!: number;
+  @Column('char', { length: 3 })
+  chargeCurrency!: string;
 
-    @ManyToOne(() => User, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'userId' })
-    user!: User;
+  @Column()
+  userId!: number;
+
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user!: User;
+
+  @Column()
+  orderId!: number;
+
+  @OneToOne(() => ProductOrder, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'orderId' })
+  order!: ProductOrder;
+
+  @Column({ nullable: true })
+  receiptUrl!: string | null;
 }

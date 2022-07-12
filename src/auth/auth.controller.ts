@@ -35,10 +35,10 @@ export class AuthController {
   }
 
   @Post('register')
-  @ApiOperation({ summary: 'Register'})
-  @ApiBody({ type: UserRegisterRequest})
+  @ApiOperation({ summary: 'Register' })
+  @ApiBody({ type: UserRegisterRequest })
   async register(@Body() req: UserRegisterRequest) {
-    const resp = await this.authService.register(req); 
+    const resp = await this.authService.register(req);
 
     return resp;
   }

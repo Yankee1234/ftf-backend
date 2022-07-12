@@ -1,11 +1,11 @@
 export class AuthRegisterRequest {
-    login!: string;
+  login!: string;
 
-    email!: string;
+  email!: string;
 
-    password!: string;
+  password!: string;
 
-    userName!: string;
+  userName!: string;
 
-    loginNow!: boolean;
+  loginNow!: boolean;
 }

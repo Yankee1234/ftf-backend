@@ -1,28 +1,39 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { User } from "./user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 export enum PMType {
-    Card = 'card'
+  Card = 'card',
 }
 
 @Entity('payment_methods')
 export class PaymentMethod {
-    @PrimaryColumn()
-    paymentMethodId!: string;
+  @PrimaryColumn()
+  paymentMethodId!: string;
 
-    @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
-    createdAt!: Date;
+  @CreateDateColumn({
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+  })
+  createdAt!: Date;
 
-    @Column()
-    userId!: number;
+  @Column()
+  userId!: number;
 
-    @ManyToOne(() => User, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'userId' })
-    user!: User;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 
-    @Column('enum', { enum: PMType, default: PMType.Card})
-    pmType!: PMType;
+  @Column('enum', { enum: PMType, default: PMType.Card })
+  pmType!: PMType;
 
-    @Column()
-    lastNumbers!: string;
+  @Column()
+  lastNumbers!: string;
 }

@@ -11,9 +11,9 @@ import { UserProfile } from 'src/domain/entities/user-profile.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([User, UserProfile])
+    TypeOrmModule.forFeature([User, UserProfile]),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, UserProfileRepository]
+  providers: [UserService, UserRepository, UserProfileRepository],
 })
 export class UserModule {}

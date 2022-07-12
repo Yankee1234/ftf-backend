@@ -1,7 +1,7 @@
-import { Game } from "./game.dto";
+import { Game } from './game.dto';
 
 export class GamesList {
-    total!: number;
+  total!: number;
 
-    list!: Game[];
+  list!: Game[];
 }

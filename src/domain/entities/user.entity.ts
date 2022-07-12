@@ -26,6 +26,10 @@ export class User {
   @Column('enum', { enum: UserRole, default: UserRole.User })
   role!: UserRole;
 
-  @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
+  @CreateDateColumn({
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+  })
   createdAt!: Date;
 }

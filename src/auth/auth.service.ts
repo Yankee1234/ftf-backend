@@ -31,30 +31,38 @@ export class AuthService {
   }
 
   async login(data: AuthLoginRequest): Promise<string> {
-      const user = await this.usersRepo.getByLogin(data.login);
-      if (!user || !(await bcrypt.compare(data.password, user.password)))
-        throw new UnauthorizedException('Invalid login or password');
+    const user = await this.usersRepo.getByLogin(data.login);
+    if (!user || !(await bcrypt.compare(data.password, user.password)))
+      throw new UnauthorizedException('Invalid login or password');
 
-      return this.generateJwtToken({id: user.id, login: user.login, role: user.role});
+    return this.generateJwtToken({
+      id: user.id,
+      login: user.login,
+      role: user.role,
+    });
   }
 
   async googleAuth(data: GoogleAuthRequest): Promise<string> {
     try {
-        const tokenInfo = await this.oAuthClient.getTokenInfo(data.token);
+      const tokenInfo = await this.oAuthClient.getTokenInfo(data.token);
 
-        const user = await this.usersRepo.getByLogin(tokenInfo.email);
-        if(!user) throw new UnauthorizedException('Auth is not successful');
+      const user = await this.usersRepo.getByLogin(tokenInfo.email);
+      if (!user) throw new UnauthorizedException('Auth is not successful');
 
-        return this.generateJwtToken({id: user.id, login: user.login, role: user.role});
-    } catch(err) {
-        if(err.status !== 404) throw new err;
+      return this.generateJwtToken({
+        id: user.id,
+        login: user.login,
+        role: user.role,
+      });
+    } catch (err) {
+      if (err.status !== 404) throw new err();
 
-        return await this.registerGoogleUser(data.token);
+      return await this.registerGoogleUser(data.token);
     }
   }
 
   async registerGoogleUser(accessToken: string): Promise<string> {
-      const userInfo = await this.getGoogleUserData(accessToken);
+    const userInfo = await this.getGoogleUserData(accessToken);
     const user = this.usersRepo.create();
     user.email = userInfo.email;
     user.login = userInfo.email;
@@ -62,46 +70,49 @@ export class AuthService {
 
     await this.usersRepo.save(user);
 
-    return await this.generateJwtToken({id: user.id, login: user.login, role: user.role});
+    return await this.generateJwtToken({
+      id: user.id,
+      login: user.login,
+      role: user.role,
+    });
   }
 
   async getGoogleUserData(token: string) {
-      try {
-        const userInfoClient = google.oauth2('v2').userinfo;
-    
-        this.oAuthClient.setCredentials({
-        access_token: token
-        })
-    
-        const userInfoResponse = await userInfoClient.get({
-            auth: this.oAuthClient
-        });
+    try {
+      const userInfoClient = google.oauth2('v2').userinfo;
 
-        return userInfoResponse.data;
-      } catch(err) {
-        throw new err;
-      }
-  }
-
-  private async generateJwtToken(user: UserJwtInfo): Promise<string>{
-
-    const tokenString = await this.jwtService.signAsync({
-        id: user.id,
-        login: user.login,
-        role: user.role,
+      this.oAuthClient.setCredentials({
+        access_token: token,
       });
 
-      const newToken = this.tokensRepo.create();
-      newToken.token = tokenString;
-      await this.tokensRepo.save(newToken);
+      const userInfoResponse = await userInfoClient.get({
+        auth: this.oAuthClient,
+      });
 
-      return newToken.token;
+      return userInfoResponse.data;
+    } catch (err) {
+      throw new err();
+    }
+  }
+
+  private async generateJwtToken(user: UserJwtInfo): Promise<string> {
+    const tokenString = await this.jwtService.signAsync({
+      id: user.id,
+      login: user.login,
+      role: user.role,
+    });
+
+    const newToken = this.tokensRepo.create();
+    newToken.token = tokenString;
+    await this.tokensRepo.save(newToken);
+
+    return newToken.token;
   }
 
   async register(data: AuthRegisterRequest) {
     try {
       const user = await this.usersRepo.getByLogin(data.login, data.email);
-      if(user) throw new ForbiddenException('User exists');
+      if (user) throw new ForbiddenException('User exists');
 
       const newUser = this.usersRepo.create();
       newUser.login = data.login;
@@ -109,11 +120,14 @@ export class AuthService {
       newUser.password = await this.hashPassword(data.password);
       await this.usersRepo.save(newUser);
 
-      const profile = this.userProfilesRepo.createProfile({userId: newUser.id, userName: data.userName});
+      const profile = this.userProfilesRepo.createProfile({
+        userId: newUser.id,
+        userName: data.userName,
+      });
 
       await this.userProfilesRepo.save(profile);
-      
-      if(data.loginNow && data.loginNow.toString() === 'true') {
+
+      if (data.loginNow && data.loginNow.toString() === 'true') {
         const tokenString = await this.jwtService.signAsync({
           id: newUser.id,
           login: newUser.login,
@@ -127,23 +141,20 @@ export class AuthService {
       }
 
       return;
-    } catch(err) {
+    } catch (err) {
       throw err;
     }
-
   }
 
   async hashPassword(plainPassword: string): Promise<string> {
     return bcrypt.hash(plainPassword, 1);
   }
 
-  async getUserByLogin(login: string) {
-    
-  }
+  async getUserByLogin(login: string) {}
 }
 
 interface UserJwtInfo {
-    id: number;
-    login: string;
-    role: UserRole;
+  id: number;
+  login: string;
+  role: UserRole;
 }

@@ -11,7 +11,7 @@ export type AuthIdentity = { id: number; login: string; role: AuthRole };
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly config: ConfigService,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

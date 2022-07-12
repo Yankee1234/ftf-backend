@@ -7,7 +7,7 @@ import {
 
 export enum Status {
   Active = 'active',
-  NotActive = 'not-active'
+  NotActive = 'not-active',
 }
 
 @Entity('tokens')
@@ -18,9 +18,13 @@ export class JwtToken {
   @Column()
   token!: string;
 
-  @CreateDateColumn({ precision: 0, default: () => 'CURRENT_TIMESTAMP', type: 'timestamp' })
+  @CreateDateColumn({
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+  })
   createdAt!: Date;
 
-  @Column({default: true})
+  @Column({ default: true })
   isActive!: boolean;
 }

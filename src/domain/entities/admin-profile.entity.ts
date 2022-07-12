@@ -1,29 +1,29 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
-import { UserFile } from "./user-file.entity";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { UserFile } from './user-file.entity';
 //import { UserFile } from "./user-file.entity";
-import { User } from "./user.entity";
+import { User } from './user.entity';
 
 export enum AdminRole {
-    Admin = 'admin',
-    SuperAdmin = 'super-admin',
-    Helper = 'helper'
+  Admin = 'admin',
+  SuperAdmin = 'super-admin',
+  Helper = 'helper',
 }
 
 @Entity('admin_profiles')
 export class AdminProfile {
-    @PrimaryColumn()
-    userId!: number;
+  @PrimaryColumn()
+  userId!: number;
 
-    @OneToOne(() => User, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'userId' })
-    user!: User;
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 
-    @Column('enum', { enum: AdminRole })
-    role!: AdminRole;
+  @Column('enum', { enum: AdminRole })
+  role!: AdminRole;
 
-    @OneToOne(() => UserFile, { nullable: true})
-    avatar?: UserFile | null;
+  @OneToOne(() => UserFile, { nullable: true })
+  avatar?: UserFile | null;
 
-    @Column({ nullable: true })
-    avatarId?: number | null;
+  @Column({ nullable: true })
+  avatarId?: number | null;
 }

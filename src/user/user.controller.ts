@@ -15,34 +15,41 @@ import { toUserProfileDto } from './serializers';
 
 @Controller('user')
 export class UserController {
-    constructor(
-        private readonly userService: UserService
-    ) {}
+  constructor(private readonly userService: UserService) {}
 
-    @Get(':id')
-    @Auth()
-    @ApiOperation({ summary: 'Get user profile'})
-    @ApiOkResponse({ type: UserProfileResponse })
-    async getProfile(@Param('id') id: string, @Req() req: PrivateRequest) {
-        return toUserProfileDto(await this.userService.getProfileById(id === 'me' ? req.user.id : +id, false));
-    }
+  @Get(':id')
+  @Auth()
+  @ApiOperation({ summary: 'Get user profile' })
+  @ApiOkResponse({ type: UserProfileResponse })
+  async getProfile(@Param('id') id: string, @Req() req: PrivateRequest) {
+    return toUserProfileDto(
+      await this.userService.getProfileById(
+        id === 'me' ? req.user.id : +id,
+        false,
+      ),
+    );
+  }
 
-    @Get('profiles')
-    @Auth()
-    @ApiOperation({ summary: 'Get all users profiles'})
-    async getProfiles(@Req() req: PrivateRequest) {
-        if(req.user.role !== AuthRole.Admin) throw new UnauthorizedException('You are not an admin');
+  @Get('profiles')
+  @Auth()
+  @ApiOperation({ summary: 'Get all users profiles' })
+  async getProfiles(@Req() req: PrivateRequest) {
+    if (req.user.role !== AuthRole.Admin)
+      throw new UnauthorizedException('You are not an admin');
 
-        return await this.userService.getAllProfilesWithUsers();
-    }
+    return await this.userService.getAllProfilesWithUsers();
+  }
 
-    @Get(':id/all')
-    @Auth()
-    @ApiOperation({ summary: 'Get full user profile by admin'})
-    async getProfileForAdmin(@Req() req: PrivateRequest, @Param('id', ParseIntPipe) id: number) {
-        if(req.user.role !== AuthRole.Admin) throw new UnauthorizedException('You are not an admin');
+  @Get(':id/all')
+  @Auth()
+  @ApiOperation({ summary: 'Get full user profile by admin' })
+  async getProfileForAdmin(
+    @Req() req: PrivateRequest,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    if (req.user.role !== AuthRole.Admin)
+      throw new UnauthorizedException('You are not an admin');
 
-        return await this.userService.getProfileById(id, true);
-    }
-
+    return await this.userService.getProfileById(id, true);
+  }
 }

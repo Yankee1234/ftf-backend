@@ -22,7 +22,7 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET, PUT, POST, DELETE',
     allowedHeaders: 'Content-Type, Authorization',
-});
+  });
   SwaggerModule.setup('', app, document);
 
   await app.listen(process.env.PORT || 3000);
