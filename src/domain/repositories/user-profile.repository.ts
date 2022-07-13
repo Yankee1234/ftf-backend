@@ -33,13 +33,15 @@ export class UserProfileRepository {
   async getUserProfileById(userId: number) {
     const query = this.repo.createQueryBuilder('profile');
 
-      query.innerJoinAndSelect('profile.user', 'u').where('profile.userId = :userId', { userId });
+    query
+      .innerJoinAndSelect('profile.user', 'u')
+      .where('profile.userId = :userId', { userId });
 
     return await query.getOne();
   }
 
   async getAll() {
-    console.log('here')
+    console.log('here');
     return await this.repo
       .createQueryBuilder('profile')
       .innerJoinAndSelect('profile.user', 'u')

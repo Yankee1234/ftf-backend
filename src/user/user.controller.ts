@@ -1,7 +1,12 @@
 import { Controller, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Get } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Auth } from 'src/auth/auth.decorator';
 import { Param } from '@nestjs/common';
 import { PrivateRequest } from 'src/auth/requests';

@@ -36,7 +36,7 @@ import { ShopService } from './shop.service';
       Product,
       ProductOrder,
       Payment,
-      Notification
+      Notification,
     ]),
   ],
   controllers: [ShopController, PaymentsController],
@@ -53,7 +53,7 @@ import { ShopService } from './shop.service';
     PaymentSchedulingService,
     NotificationService,
     NotificationRepository,
-    StripeListener
+    StripeListener,
   ],
 })
 export class ShopModule {}

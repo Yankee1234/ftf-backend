@@ -89,9 +89,7 @@ export class GameService {
     const profile = await this.profilesRepo.getUserProfileById(req.userId);
     const usersGames = await this.usersGamesRepo.getUsersGames(req.userId);
 
-    return toUserProfileDto(
-      { userProfile: profile, games: usersGames}
-    );
+    return toUserProfileDto({ userProfile: profile, games: usersGames });
   }
 
   async getUsersGames(userId: number) {

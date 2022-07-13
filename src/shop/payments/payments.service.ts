@@ -9,7 +9,10 @@ import {
   ProductOrder,
 } from 'src/domain/entities/product-order.entity';
 import { PMType } from 'src/domain/entities/stripe-payment-method.entity';
-import { Payment, PaymentStatus } from 'src/domain/entities/stripe-payment.entity';
+import {
+  Payment,
+  PaymentStatus,
+} from 'src/domain/entities/stripe-payment.entity';
 import { ProductOrderRepository } from 'src/domain/repositories/product-order.repository';
 import { StripeCustomerRepository } from 'src/domain/repositories/stripe-customer.repository';
 import { StripePaymentMethodRepository } from 'src/domain/repositories/stripe-payment-method.repository';
@@ -70,9 +73,7 @@ export class PaymentsService {
 
   async createStripeCustomer(userId: number) {
     try {
-      const profile = await this.userProfilesRepo.getUserProfileById(
-        userId
-      );
+      const profile = await this.userProfilesRepo.getUserProfileById(userId);
       const { user } = profile;
 
       const stripeCustomer = await this.stripe.customers.create({
@@ -209,20 +210,20 @@ export class PaymentsService {
           userId: req.userId,
           orderId: order.id,
         },
-        customer: customer.stripeCustomerId
+        customer: customer.stripeCustomerId,
       });
 
       localPayment.stripePaymentId = payment.id;
       localPayment.chargeAmount = order.totalAmount;
       localPayment.chargeCurrency = order.totalCurrency;
 
-      console.log('payment')
+      console.log('payment');
 
       if (payment.status === 'succeeded') {
         localPayment.status = PaymentStatus.Succeeded;
         order.status = OrderStatus.Paid;
         const invoice = payment.invoice;
-        if(invoice && typeof invoice !== 'string') {
+        if (invoice && typeof invoice !== 'string') {
           localPayment.receiptUrl = invoice.invoice_pdf;
         }
 
@@ -275,6 +276,6 @@ export class PaymentsService {
       dto.lastNumbers = pm.lastNumbers;
 
       return dto;
-    })
+    });
   }
 }

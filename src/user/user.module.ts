@@ -16,6 +16,11 @@ import { UsersGamesRepository } from 'src/domain/repositories/users-games.reposi
     TypeOrmModule.forFeature([User, UserProfile, UsersGames]),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, UserProfileRepository, UsersGamesRepository],
+  providers: [
+    UserService,
+    UserRepository,
+    UserProfileRepository,
+    UsersGamesRepository,
+  ],
 })
 export class UserModule {}

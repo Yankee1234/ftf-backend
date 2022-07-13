@@ -5,7 +5,7 @@ import { IUserProfile } from './user.service';
 
 export function toUserProfileDto(user: IUserProfile): UserProfileResponse {
   const dto = new UserProfileResponse();
-  const { userProfile, games} = user;
+  const { userProfile, games } = user;
   dto.userName = userProfile.userName ?? userProfile.user.login;
   dto.email = userProfile.user.email;
   dto.role = userProfile.role;

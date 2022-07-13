@@ -26,7 +26,7 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly userProfilesRepo: UserProfileRepository,
     private readonly usersRepo: UserRepository,
-    private readonly adminsRepo: AdminProfileRepository
+    private readonly adminsRepo: AdminProfileRepository,
   ) {
     const clientId = this.config.get('GOOGLE_CLIENT_ID');
     const clientSecret = this.config.get('GOOGLE_CLIENT_SECRET');

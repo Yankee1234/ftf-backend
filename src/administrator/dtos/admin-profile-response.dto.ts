@@ -1,7 +1,7 @@
-import { AdminRole } from "src/domain/entities/admin-profile.entity";
+import { AdminRole } from 'src/domain/entities/admin-profile.entity';
 
 export class AdminProfileResponse {
-    login!: string;
+  login!: string;
 
-    role!: AdminRole;
+  role!: AdminRole;
 }

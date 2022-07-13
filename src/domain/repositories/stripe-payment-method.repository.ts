@@ -26,9 +26,9 @@ export class StripePaymentMethodRepository {
   }
 
   async getByUserId(userId: number) {
-    
-    return await this.repo.createQueryBuilder('pm')
-    .where('pm.userId = :userId', { userId })
-    .getMany();
-  } 
+    return await this.repo
+      .createQueryBuilder('pm')
+      .where('pm.userId = :userId', { userId })
+      .getMany();
+  }
 }

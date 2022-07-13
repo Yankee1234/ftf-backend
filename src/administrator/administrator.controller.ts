@@ -8,15 +8,15 @@ import { AdministratorService } from './administrator.service';
 @Controller('administrator')
 @ApiTags('Administrator')
 export class AdministratorController {
+  constructor(private readonly adminService: AdministratorService) {}
 
-    constructor(private readonly adminService: AdministratorService) {}
+  @Get('me')
+  @Auth()
+  @ApiOperation({ summary: 'Get admin profile' })
+  async getAdministratorProfile(@Req() req: PrivateRequest) {
+    if (req.user.role !== AuthRole.Admin)
+      throw new UnauthorizedException('You are not an admin');
 
-    @Get('me')
-    @Auth()
-    @ApiOperation({ summary: 'Get admin profile'})
-    async getAdministratorProfile(@Req() req: PrivateRequest) {
-        if(req.user.role !== AuthRole.Admin) throw new UnauthorizedException('You are not an admin');
-
-        return await this.adminService.getProfile(req.user.id);
-    }
+    return await this.adminService.getProfile(req.user.id);
+  }
 }

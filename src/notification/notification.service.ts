@@ -18,8 +18,8 @@ export class NotificationService {
   }
 
   async getUserNotifications(userId: number) {
-    return (await this.notificationRepo.getUsersNotifications(userId)).map((n) =>
-      NotificationService.toNotificationDto(n),
+    return (await this.notificationRepo.getUsersNotifications(userId)).map(
+      (n) => NotificationService.toNotificationDto(n),
     );
   }
 
@@ -32,9 +32,11 @@ export class NotificationService {
   }
 
   async readAllNotifications(userId: number) {
-    const notifications = await this.notificationRepo.getUsersNotifications(userId);
+    const notifications = await this.notificationRepo.getUsersNotifications(
+      userId,
+    );
 
-    for(let i = 0; i < notifications.length; i += 1) {
+    for (let i = 0; i < notifications.length; i += 1) {
       const n = notifications[i];
       n.readAt = new Date();
 

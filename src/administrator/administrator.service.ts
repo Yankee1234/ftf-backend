@@ -5,18 +5,19 @@ import { AdminProfileResponse } from './dtos/admin-profile-response.dto';
 
 @Injectable()
 export class AdministratorService {
+  constructor(private readonly adminRepo: AdminProfileRepository) {}
 
-    constructor(private readonly adminRepo: AdminProfileRepository) {}
+  async getProfile(id: number) {
+    return AdministratorService.toAdminProfileResponseDto(
+      await this.adminRepo.getByIdWithUser(id),
+    );
+  }
 
-    async getProfile(id: number) {
-        return AdministratorService.toAdminProfileResponseDto(await this.adminRepo.getByIdWithUser(id));
-    }
+  private static toAdminProfileResponseDto(profile: AdminProfile) {
+    const dto = new AdminProfileResponse();
+    dto.login = profile.user.login;
+    dto.role = profile.role;
 
-    private static toAdminProfileResponseDto(profile: AdminProfile) {
-        const dto = new AdminProfileResponse();
-        dto.login = profile.user.login;
-        dto.role = profile.role;
-
-        return dto;
-    }
+    return dto;
+  }
 }

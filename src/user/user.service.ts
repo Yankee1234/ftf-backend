@@ -12,7 +12,7 @@ import { UpdateProfileRequest } from './dtos/update-profile-request.dto';
 import { UserProfileResponse } from './dtos/user-profile-response.dto';
 
 export interface IUserProfile {
-  userProfile:UserProfile;
+  userProfile: UserProfile;
   games: UsersGames[];
 }
 
@@ -21,15 +21,18 @@ export class UserService {
   constructor(
     private readonly profilesRepo: UserProfileRepository,
     private readonly usersRepo: UserRepository,
-    private readonly usersGamesRepo: UsersGamesRepository
+    private readonly usersGamesRepo: UsersGamesRepository,
   ) {}
 
-  async getProfileById(userId: number, withUser: boolean): Promise<IUserProfile> {
+  async getProfileById(
+    userId: number,
+    withUser: boolean,
+  ): Promise<IUserProfile> {
     const user = await this.profilesRepo.getUserProfileById(userId);
     if (!user) throw new NotFoundException('User not found');
 
     const games = await this.usersGamesRepo.getUsersGames(userId);
-    return { userProfile: user, games: games};
+    return { userProfile: user, games: games };
   }
 
   async getAllProfilesWithUsers() {
@@ -37,7 +40,7 @@ export class UserService {
   }
 
   async updateProfile(data: UpdateProfileRequest) {
-    const {userProfile} = await this.getProfileById(data.userId, true);
+    const { userProfile } = await this.getProfileById(data.userId, true);
     const user = userProfile.user;
 
     userProfile.userName = data.userName ?? userProfile.userName;

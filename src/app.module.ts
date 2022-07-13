@@ -39,7 +39,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     NotificationModule,
     EventEmitterModule.forRoot(),
     AdministratorModule,
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

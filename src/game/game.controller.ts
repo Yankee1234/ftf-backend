@@ -80,10 +80,11 @@ export class GameController {
 
   @Get('me')
   @Auth()
-  @ApiOperation({ summary: 'Get all users games'})
-  @ApiOkResponse({ type: GamesList})
+  @ApiOperation({ summary: 'Get all users games' })
+  @ApiOkResponse({ type: GamesList })
   async getUserGames(@Req() req: PrivateRequest) {
-    if(req.user.role !== AuthRole.User) throw new UnauthorizedException('You are not a user');
+    if (req.user.role !== AuthRole.User)
+      throw new UnauthorizedException('You are not a user');
 
     return await this.gameService.getUsersGames(req.user.id);
   }

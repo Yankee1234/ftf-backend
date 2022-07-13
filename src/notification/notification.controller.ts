@@ -27,7 +27,7 @@ export class NotificationController {
 
   @Put('read-all')
   @Auth()
-  @ApiOperation({ summary: 'Mark all notifications as read'})
+  @ApiOperation({ summary: 'Mark all notifications as read' })
   async readAllNotifications(@Req() req: PrivateRequest) {
     return await this.notificationService.readAllNotifications(req.user.id);
   }

@@ -20,10 +20,10 @@ export class NotificationRepository {
 
   async getUsersNotifications(userId: number) {
     return await this.repo
-    .createQueryBuilder('n')
-    .where('n.userId = :userId', { userId })
-    .andWhere('n.readAt IS NULL')
-    .getMany();
+      .createQueryBuilder('n')
+      .where('n.userId = :userId', { userId })
+      .andWhere('n.readAt IS NULL')
+      .getMany();
   }
 
   async getUnreadCount(userId: number) {

@@ -38,7 +38,7 @@ import { AdminProfileRepository } from 'src/domain/repositories/admin-profile.re
     UserRepository,
     TokenRepository,
     UserProfileRepository,
-    AdminProfileRepository
+    AdminProfileRepository,
   ],
 })
 export class AuthModule {}
