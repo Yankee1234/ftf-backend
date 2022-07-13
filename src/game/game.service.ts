@@ -86,8 +86,17 @@ export class GameService {
 
     await this.usersGamesRepo.save(newUserGame);
 
+    const profile = await this.profilesRepo.getUserProfileById(req.userId);
+    const usersGames = await this.usersGamesRepo.getUsersGames(req.userId);
+
     return toUserProfileDto(
-      await this.profilesRepo.getUserProfileById(req.userId, true),
+      { userProfile: profile, games: usersGames}
     );
+  }
+
+  async getUsersGames(userId: number) {
+    const games = await this.usersGamesRepo.getUsersGames(userId);
+
+    return GameService.toGameDtoArray(games.map((g) => g.game));
   }
 }

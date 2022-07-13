@@ -22,6 +22,7 @@ import { AuthRole } from 'src/auth/security';
 import { UserProfileResponse } from 'src/user/dtos/user-profile-response.dto';
 import { AddGameRequest } from './dtos/add-game-request.dto';
 import { AddUserGameRequest } from './dtos/add-user-game-request.dto';
+import { GamesList } from './dtos/games-list.dto';
 import { GameService } from './game.service';
 import { toGameDto } from './serializers';
 
@@ -75,5 +76,15 @@ export class GameController {
       throw new UnauthorizedException('You are not a user');
 
     return await this.gameService.addUserGame(data);
+  }
+
+  @Get('me')
+  @Auth()
+  @ApiOperation({ summary: 'Get all users games'})
+  @ApiOkResponse({ type: GamesList})
+  async getUserGames(@Req() req: PrivateRequest) {
+    if(req.user.role !== AuthRole.User) throw new UnauthorizedException('You are not a user');
+
+    return await this.gameService.getUsersGames(req.user.id);
   }
 }

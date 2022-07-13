@@ -31,4 +31,12 @@ export class UsersGamesRepository {
       .setParameters({ userId: data.userId, gameId: data.gameId })
       .getOne();
   }
+
+  async getUsersGames(userId: number) {
+    return await this.repo.createQueryBuilder('ug')
+    .innerJoinAndSelect('ug.game', 'game')
+    .innerJoinAndSelect('ug.user', 'user')
+    .where('ug.userId = :userId', {userId})
+    .getMany();
+  }
 }

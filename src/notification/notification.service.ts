@@ -18,9 +18,7 @@ export class NotificationService {
   }
 
   async getUserNotifications(userId: number) {
-    await this.notificationRepo.readAllByUserId(userId);
-
-    return (await this.notificationRepo.getByUserId(userId)).map((n) =>
+    return (await this.notificationRepo.getUsersNotifications(userId)).map((n) =>
       NotificationService.toNotificationDto(n),
     );
   }
@@ -31,5 +29,18 @@ export class NotificationService {
 
   static toNotificationDto(notification: Notification): NotificationDto {
     return new NotificationDto(notification.message, notification.createdAt);
+  }
+
+  async readAllNotifications(userId: number) {
+    const notifications = await this.notificationRepo.getUsersNotifications(userId);
+
+    for(let i = 0; i < notifications.length; i += 1) {
+      const n = notifications[i];
+      n.readAt = new Date();
+
+      await this.notificationRepo.save(n);
+    }
+
+    return await this.getUserNotifications(userId);
   }
 }

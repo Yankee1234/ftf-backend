@@ -29,6 +29,8 @@ export class PaymentSchedulingService {
 
   @Cron('* * * * *')
   async handlePendingPayments() {
+    this.log.trace('Handle pending payments');
+
     try {
       const payments = await this.paymentRepo.getPendingWithOrder();
 

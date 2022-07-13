@@ -95,6 +95,8 @@ export class ShopService {
       await this.paymentService.createPaymentForOrder(req, order, identity);
     } catch (err) {
       this.log.error('Error while buying product', { err });
+
+      throw err;
     }
   }
 }

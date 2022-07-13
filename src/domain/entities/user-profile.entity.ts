@@ -4,7 +4,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserFile } from './user-file.entity';
 //import { UserFile } from "./user-file.entity";
@@ -19,7 +19,10 @@ export enum UserProfileRole {
 
 @Entity('users_profiles')
 export class UserProfile {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column()
   userId!: number;
 
   @OneToOne(() => User, { onDelete: 'CASCADE' })
@@ -40,7 +43,4 @@ export class UserProfile {
 
   @Column({ nullable: true })
   avatarId?: number | null;
-
-  @OneToMany(() => UsersGames, (game) => game.game)
-  games!: UsersGames[];
 }

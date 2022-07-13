@@ -1,19 +1,18 @@
 import { Controller, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Get } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/auth.decorator';
 import { Param } from '@nestjs/common';
 import { PrivateRequest } from 'src/auth/requests';
 import { ParseIntPipe } from '@nestjs/common';
-import { NotFoundException } from '@nestjs/common';
 import { AuthRole } from 'src/auth/security';
 import { UnauthorizedException } from '@nestjs/common';
-import { Put } from '@nestjs/common';
 import { UserProfileResponse } from './dtos/user-profile-response.dto';
 import { toUserProfileDto } from './serializers';
 
 @Controller('user')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

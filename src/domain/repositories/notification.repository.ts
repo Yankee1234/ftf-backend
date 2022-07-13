@@ -18,20 +18,12 @@ export class NotificationRepository {
     await this.repo.save(entity);
   }
 
-  async getByUserId(userId: number) {
+  async getUsersNotifications(userId: number) {
     return await this.repo
-      .createQueryBuilder('n')
-      .where('n.userId = :userId', { userId })
-      .getMany();
-  }
-
-  async readAllByUserId(userId: number) {
-    return await this.repo
-      .createQueryBuilder('n')
-      .update({ readAt: new Date() })
-      .where('n.userId = :userId', { userId })
-      .andWhere('n.readAt IS NULL')
-      .execute();
+    .createQueryBuilder('n')
+    .where('n.userId = :userId', { userId })
+    .andWhere('n.readAt IS NULL')
+    .getMany();
   }
 
   async getUnreadCount(userId: number) {

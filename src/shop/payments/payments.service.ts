@@ -9,7 +9,7 @@ import {
   ProductOrder,
 } from 'src/domain/entities/product-order.entity';
 import { PMType } from 'src/domain/entities/stripe-payment-method.entity';
-import { PaymentStatus } from 'src/domain/entities/stripe-payment.entity';
+import { Payment, PaymentStatus } from 'src/domain/entities/stripe-payment.entity';
 import { ProductOrderRepository } from 'src/domain/repositories/product-order.repository';
 import { StripeCustomerRepository } from 'src/domain/repositories/stripe-customer.repository';
 import { StripePaymentMethodRepository } from 'src/domain/repositories/stripe-payment-method.repository';
@@ -28,6 +28,8 @@ import { CreateStripeProductRequest } from './dtos/create-product-request.dto';
 import { PaymentMethodAttachedEvent } from './events/payment-method-attached-event';
 import { PaymentSucceededEvent } from './events/payment-succeeded-event';
 import { formatStripeCurrency } from './helpers/stripe-helper';
+import { Payment as PaymentDto } from './dtos/payment.dto';
+import { PaymentMethod } from './dtos/payment-methods.dto';
 
 interface ICreatedProductData {
   productId: string;
@@ -69,8 +71,7 @@ export class PaymentsService {
   async createStripeCustomer(userId: number) {
     try {
       const profile = await this.userProfilesRepo.getUserProfileById(
-        userId,
-        true,
+        userId
       );
       const { user } = profile;
 
@@ -195,6 +196,8 @@ export class PaymentsService {
         req.paymentMethodId,
       );
 
+      const customer = await this.stripeCustomerRepo.getById(identity.id);
+
       const payment = await this.stripe.paymentIntents.create({
         payment_method: paymentMethod.paymentMethodId,
         amount: formatStripeCurrency(
@@ -206,15 +209,22 @@ export class PaymentsService {
           userId: req.userId,
           orderId: order.id,
         },
+        customer: customer.stripeCustomerId
       });
 
       localPayment.stripePaymentId = payment.id;
       localPayment.chargeAmount = order.totalAmount;
       localPayment.chargeCurrency = order.totalCurrency;
 
+      console.log('payment')
+
       if (payment.status === 'succeeded') {
         localPayment.status = PaymentStatus.Succeeded;
         order.status = OrderStatus.Paid;
+        const invoice = payment.invoice;
+        if(invoice && typeof invoice !== 'string') {
+          localPayment.receiptUrl = invoice.invoice_pdf;
+        }
 
         await this.ordersRepo.save(order);
         await this.paymentRepo.save(localPayment);
@@ -232,8 +242,39 @@ export class PaymentsService {
       await this.paymentRepo.save(localPayment);
     } catch (err) {
       this.log.error('Error while processing payment', { err });
+
+      throw err;
     }
   }
 
+  async getAllUserPayments(userId: number) {
+    const payments = await this.paymentRepo.getByUserId(userId);
+
+    return payments.map((p) => PaymentsService.toPaymentDto(p));
+  }
+
+  private static toPaymentDto(payment: Payment) {
+    const dto = new PaymentDto();
+    dto.id = payment.id;
+    dto.status = payment.status;
+    dto.amount = payment.chargeAmount;
+    dto.currency = payment.chargeCurrency;
+    dto.receiptUrl = payment.receiptUrl;
+
+    return dto;
+  }
+
   async cancelPaymentForOrder(paymentId: string, identity: AuthIdentity) {}
+
+  async getPaymentMethods(userId: number) {
+    const paymentMethods = await this.paymentMethodRepo.getByUserId(userId);
+
+    return paymentMethods.map((pm) => {
+      const dto = new PaymentMethod();
+      dto.paymentMethodId = pm.paymentMethodId;
+      dto.lastNumbers = pm.lastNumbers;
+
+      return dto;
+    })
+  }
 }

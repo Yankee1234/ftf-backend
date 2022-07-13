@@ -12,6 +12,8 @@ import { UserProfileRepository } from 'src/domain/repositories/user-profile.repo
 import { User } from 'src/domain/entities/user.entity';
 import { JwtToken } from 'src/domain/entities/token.entity';
 import { UserProfile } from 'src/domain/entities/user-profile.entity';
+import { AdminProfile } from 'src/domain/entities/admin-profile.entity';
+import { AdminProfileRepository } from 'src/domain/repositories/admin-profile.repository';
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ import { UserProfile } from 'src/domain/entities/user-profile.entity';
         },
       }),
     }),
-    TypeOrmModule.forFeature([User, JwtToken, UserProfile]),
+    TypeOrmModule.forFeature([User, JwtToken, UserProfile, AdminProfile]),
   ],
   controllers: [AuthController],
   providers: [
@@ -36,6 +38,7 @@ import { UserProfile } from 'src/domain/entities/user-profile.entity';
     UserRepository,
     TokenRepository,
     UserProfileRepository,
+    AdminProfileRepository
   ],
 })
 export class AuthModule {}

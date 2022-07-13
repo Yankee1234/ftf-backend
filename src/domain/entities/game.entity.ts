@@ -14,9 +14,6 @@ export class Game {
   @Column()
   name!: string;
 
-  @OneToMany(() => UsersGames, (user) => user.user)
-  usersGames!: UsersGames[];
-
   @CreateDateColumn({
     precision: 0,
     default: () => 'CURRENT_TIMESTAMP',

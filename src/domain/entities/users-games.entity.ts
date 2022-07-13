@@ -4,6 +4,7 @@ import { JoinColumn } from 'typeorm/decorator/relations/JoinColumn';
 import { ManyToOne } from 'typeorm/decorator/relations/ManyToOne';
 import { Game } from './game.entity';
 import { UserProfile } from './user-profile.entity';
+import { User } from './user.entity';
 
 @Entity('users_games')
 export class UsersGames {
@@ -13,14 +14,14 @@ export class UsersGames {
   @Column()
   userId!: number;
 
-  @ManyToOne(() => UserProfile, (user) => user.games, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  user!: UserProfile;
+  user!: User;
 
   @Column()
   gameId!: number;
 
-  @ManyToOne(() => Game, (game) => game.usersGames, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Game, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'gameId' })
   game!: Game;
 }
