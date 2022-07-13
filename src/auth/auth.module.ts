@@ -24,9 +24,6 @@ import { AdminProfileRepository } from 'src/domain/repositories/admin-profile.re
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get('JWT_SECRET_KEY'),
-        signOptions: {
-          expiresIn: '10m',
-        },
       }),
     }),
     TypeOrmModule.forFeature([User, JwtToken, UserProfile, AdminProfile]),

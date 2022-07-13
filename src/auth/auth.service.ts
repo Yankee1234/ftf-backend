@@ -100,11 +100,14 @@ export class AuthService {
   }
 
   private async generateJwtToken(user: UserJwtInfo): Promise<string> {
+    var d = new Date();
+
+    var calculatedExpiresIn = (((d.getTime()) + (60 * 60 * 1000)) - (d.getTime() - d.getMilliseconds()) / 1000);
     const tokenString = await this.jwtService.signAsync({
       id: user.id,
       login: user.login,
       role: user.role,
-    });
+    }, {expiresIn: calculatedExpiresIn});
 
     const newToken = this.tokensRepo.create();
     newToken.token = tokenString;
@@ -132,12 +135,16 @@ export class AuthService {
 
       await this.userProfilesRepo.save(profile);
 
+      var d = new Date();
+
+      var calculatedExpiresIn = (((d.getTime()) + (60 * 60 * 1000)) - (d.getTime() - d.getMilliseconds()) / 1000);
+
       if (data.loginNow && data.loginNow.toString() === 'true') {
         const tokenString = await this.jwtService.signAsync({
           id: newUser.id,
           login: newUser.login,
-          role: newUser.role,
-        });
+          role: newUser.role,   
+        }, { expiresIn: calculatedExpiresIn});
         const newToken = this.tokensRepo.create();
         newToken.token = tokenString;
         await this.tokensRepo.save(newToken);
