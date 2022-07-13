@@ -12,6 +12,9 @@ import { UserProfileRepository } from 'src/domain/repositories/user-profile.repo
 import { UserRole } from 'src/domain/entities/user.entity';
 import { AuthRegisterRequest } from './dtos/auth-register-request.dto';
 import { UserRepository } from 'src/domain/repositories/user.repository';
+import { AdminProfileRepository } from 'src/domain/repositories/admin-profile.repository';
+import { AdminRole } from 'src/domain/entities/admin-profile.entity';
+import { AuthRole } from './security';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +26,7 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly userProfilesRepo: UserProfileRepository,
     private readonly usersRepo: UserRepository,
+    private readonly adminsRepo: AdminProfileRepository,
   ) {
     const clientId = this.config.get('GOOGLE_CLIENT_ID');
     const clientSecret = this.config.get('GOOGLE_CLIENT_SECRET');
@@ -118,6 +122,7 @@ export class AuthService {
       newUser.login = data.login;
       newUser.email = data.email;
       newUser.password = await this.hashPassword(data.password);
+      newUser.role = UserRole.User;
       await this.usersRepo.save(newUser);
 
       const profile = this.userProfilesRepo.createProfile({

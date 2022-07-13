@@ -7,13 +7,20 @@ import { UserProfileRepository } from 'src/domain/repositories/user-profile.repo
 import { UserRepository } from 'src/domain/repositories/user.repository';
 import { User } from 'src/domain/entities/user.entity';
 import { UserProfile } from 'src/domain/entities/user-profile.entity';
+import { UsersGames } from 'src/domain/entities/users-games.entity';
+import { UsersGamesRepository } from 'src/domain/repositories/users-games.repository';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([User, UserProfile]),
+    TypeOrmModule.forFeature([User, UserProfile, UsersGames]),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, UserProfileRepository],
+  providers: [
+    UserService,
+    UserRepository,
+    UserProfileRepository,
+    UsersGamesRepository,
+  ],
 })
 export class UserModule {}

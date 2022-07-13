@@ -10,6 +10,9 @@ import { GameModule } from './game/game.module';
 import { ShopModule } from './shop/shop.module';
 import { LoggerModule } from 'nestjs-pino';
 import { NotificationModule } from './notification/notification.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AdministratorModule } from './administrator/administrator.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -34,6 +37,9 @@ import { NotificationModule } from './notification/notification.module';
     ShopModule,
     LoggerModule.forRoot(),
     NotificationModule,
+    EventEmitterModule.forRoot(),
+    AdministratorModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

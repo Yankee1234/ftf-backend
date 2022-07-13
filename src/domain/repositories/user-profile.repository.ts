@@ -30,25 +30,21 @@ export class UserProfileRepository {
     await this.repo.save<UserProfile>(user);
   }
 
-  async getUserProfileById(userId: number, withUser: boolean) {
-    const query = this.repo.createQueryBuilder('p');
+  async getUserProfileById(userId: number) {
+    const query = this.repo.createQueryBuilder('profile');
 
-    if (withUser && withUser.toString() === 'true')
-      query.innerJoinAndSelect('p.user', 'u');
-    else query.innerJoin('p.user', 'u');
     query
-      .leftJoinAndSelect('p.games', 'games')
-      .leftJoinAndSelect('games.game', 'game');
-
-    query.where('p.userId = :userId', { userId });
+      .innerJoinAndSelect('profile.user', 'u')
+      .where('profile.userId = :userId', { userId });
 
     return await query.getOne();
   }
 
   async getAll() {
+    console.log('here');
     return await this.repo
-      .createQueryBuilder('p')
-      .innerJoinAndSelect('p.user', 'u')
+      .createQueryBuilder('profile')
+      .innerJoinAndSelect('profile.user', 'u')
       .getMany();
   }
 }

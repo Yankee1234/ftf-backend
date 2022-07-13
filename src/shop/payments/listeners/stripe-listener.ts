@@ -33,6 +33,8 @@ export class StripeListener {
   async handlePaymentSucceededEvent(evt: PaymentSucceededEvent) {
     this.log.info(`Handle event ${PaymentSucceededEvent.NAME}`);
 
+    console.log('in payment handling');
+
     await this.notificationService.createNotification({
       message: 'Payment for order has been succeeded',
       userId: evt.identity.id,
